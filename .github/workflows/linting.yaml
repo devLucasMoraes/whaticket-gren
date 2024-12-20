@@ -1,0 +1,42 @@
+name: Linting
+
+on: pull_request
+
+jobs:
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/hydrogen
+
+      # Instalar o PNPM
+      - run: corepack enable
+      - run: corepack prepare pnpm@latest --activate
+
+      # Instalar dependências e rodar Prettier
+      - run: pnpm install --frozen-lockfile
+        working-directory: ./frontend
+      - run: pnpm format:check
+        working-directory: ./frontend
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/hydrogen
+
+      # Instalar o PNPM
+      - run: corepack enable
+      - run: corepack prepare pnpm@latest --activate
+
+      # Instalar dependências e rodar ESLint
+      - run: pnpm install --frozen-lockfile
+        working-directory: ./frontend
+      - run: pnpm lint:check
+        working-directory: ./frontend
