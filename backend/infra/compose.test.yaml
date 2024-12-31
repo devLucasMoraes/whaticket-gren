@@ -1,0 +1,14 @@
+services:
+  postgres_test:
+    container_name: postgres_test
+    image: postgres:16.0-alpine3.18
+    ports:
+      - "5433:5433"
+    env_file:
+      - ../.env.test
+    networks:
+      - app_network_test
+
+networks:
+  app_network_test:
+    driver: bridge

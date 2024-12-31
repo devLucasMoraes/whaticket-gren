@@ -56,6 +56,7 @@ export default function WhatsAppModal({ open, onClose, whatsAppId }) {
 
       try {
         const { data } = await api.get(`whatsapp/${whatsAppId}`);
+        console.log(data);
         reset(data);
 
         const whatsQueueIds = data.queues?.map((queue) => queue.id);

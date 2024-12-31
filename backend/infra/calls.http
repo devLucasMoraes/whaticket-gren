@@ -1,0 +1,26 @@
+### SINGUP
+
+POST http://localhost:3000/signup HTTP/1.1
+content-type: application/json
+
+{
+    "name": "lucas",
+    "email": "email@email.com",
+    "password": "123456"
+}
+
+### LOGIN
+
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "email@email.com",
+    "password": "123456"
+}
+
+### PROFILE
+
+GET   http://localhost:3000/users/5d759f02-3826-458d-b90e-5ba52b7b3830 HTTP/1.1
+content-type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6ImFkbWluIiwiaWQiOiJiOGFmZDgwYi0zYzA4LTQwZmYtYTgzYy02OWY2NTExZmJkNWMiLCJpYXQiOjE3MzU2MDMxMTYsImV4cCI6MTczNTYwNDAxNn0.rOlDZAltGkV6v2_A7HC9vAkQ1mudJcQCI3smMnkAAf0
