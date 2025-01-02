@@ -4,9 +4,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Ticket } from "./Ticket";
+import UserQueue from "./UserQueue";
+import { Whatsapp } from "./Whatsapp";
 
 @Entity("users")
 export class User {
@@ -36,6 +42,19 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @OneToMany(() => Ticket, (ticket) => ticket.user)
+  tickets: Ticket[];
+
+  @OneToMany(() => UserQueue, (userQueue) => userQueue.user)
+  userQueues: UserQueue[];
+
+  @ManyToOne(() => Whatsapp, (whatsapp) => whatsapp.whatsappUsers, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "whatsapp_id" })
+  whatsapp: Whatsapp;
+
   async hashPassword() {
     this.password = await hash(this.password, 8);
   }
