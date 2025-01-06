@@ -10,7 +10,7 @@ const env = process.env.NODE_ENV || "development";
 dotenv.config({
   path: path.resolve(__dirname, `../../.env.${env}`),
 });
-console.log("---------------------------------------",env);
+console.log(`------------------${env}---------------------`);
 const baseConfig: DataSourceOptions & SeederOptions = {
   type: "postgres",
   host: process.env.POSTGRES_HOST,

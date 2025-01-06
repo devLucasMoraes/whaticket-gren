@@ -1,7 +1,9 @@
 import retry from "async-retry";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../database/data-source";
+import { Queue } from "../entities/Queue";
 import { User } from "../entities/User";
+import { Whatsapp } from "../entities/Whatsapp";
 
 class TestOrchestrator {
   private static instance: TestOrchestrator;
@@ -71,6 +73,18 @@ class TestOrchestrator {
         .createQueryBuilder()
         .delete()
         .from(User)
+        .execute();
+
+      await transactionalEntityManager
+        .createQueryBuilder()
+        .delete()
+        .from(Whatsapp)
+        .execute();
+
+      await transactionalEntityManager
+        .createQueryBuilder()
+        .delete()
+        .from(Queue)
         .execute();
     });
   }

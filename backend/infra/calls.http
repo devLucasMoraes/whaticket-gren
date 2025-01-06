@@ -19,8 +19,43 @@ content-type: application/json
     "password": "123456"
 }
 
-### PROFILE
-
-GET   http://localhost:3000/users/5d759f02-3826-458d-b90e-5ba52b7b3830 HTTP/1.1
+### QUEUE
+POST http://localhost:3000/queue HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6ImFkbWluIiwiaWQiOiJiOGFmZDgwYi0zYzA4LTQwZmYtYTgzYy02OWY2NTExZmJkNWMiLCJpYXQiOjE3MzU2MDMxMTYsImV4cCI6MTczNTYwNDAxNn0.rOlDZAltGkV6v2_A7HC9vAkQ1mudJcQCI3smMnkAAf0
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+
+{
+    "color": "#1111de",
+    "name": "queue1 test-call",
+    "greetingMessage": "message1 test-call"
+}
+
+
+### WHATSAPP 
+
+POST http://localhost:3000/whatsapp HTTP/1.1
+content-type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+
+{
+    "farewellMessage": "message test-call",
+    "greetingMessage": "message test-call",
+    "isDefault": false,
+    "name": "teste-call2",
+    "queueIds": [102]
+}
+
+### WHATSAPP 
+GET http://localhost:3000/whatsapp/114 HTTP/1.1
+content-type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+
+### WHATSAPP 
+GET http://localhost:3000/whatsapp HTTP/1.1
+content-type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+
+### WHATSAPP 
+DELETE  http://localhost:3000/whatsapp/114 HTTP/1.1
+content-type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6ImU4YTcyMDAzLTUyYzktNGI0Ni1iYzViLWQzYTk1NmEzNGRmMyIsImlhdCI6MTczNjExNzU3MCwiZXhwIjoxNzM2MTE4NDcwfQ.69NlLrdUr3hvmlhaCMGlwkweWKi59hGkmDoX17O9kU0

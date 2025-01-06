@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Ticket } from "./Ticket";
 import UserQueue from "./UserQueue";
-import { WhatsappQueue } from "./WhatsappQueue";
+import { Whatsapp } from "./Whatsapp";
 
 @Entity("queues")
 export class Queue {
@@ -37,9 +37,15 @@ export class Queue {
   @OneToMany(() => Ticket, (ticket) => ticket.queue)
   tickets: Ticket[];
 
-  @OneToMany(() => WhatsappQueue, (whatsappQueue) => whatsappQueue.queue)
-  whatsappQueues: WhatsappQueue[];
-
   @OneToMany(() => UserQueue, (userQueue) => userQueue.queue)
   userQueues: UserQueue[];
+
+  @OneToMany(() => Whatsapp, (whatsapp) => whatsapp.queues)
+  whatsapps: Whatsapp[];
+
+  constructor(data?: Partial<Queue>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }

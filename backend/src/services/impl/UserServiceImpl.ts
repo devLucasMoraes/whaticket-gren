@@ -13,9 +13,11 @@ export class UserServiceImpl implements UserService {
 
     return user;
   }
+
   async list(): Promise<User[]> {
     return await userRepository.find();
   }
+
   async show(id: string): Promise<User> {
     const userExists = await userRepository.findOneBy({ id });
 
@@ -25,6 +27,7 @@ export class UserServiceImpl implements UserService {
 
     return userExists;
   }
+
   async create(entity: User): Promise<User> {
     const { email } = entity;
 
@@ -36,10 +39,31 @@ export class UserServiceImpl implements UserService {
 
     await entity.hashPassword();
 
-    const newUser = userRepository.create(entity);
+    const savedUser = await userRepository.save(entity);
 
-    return await userRepository.save(newUser);
+    if (entity.whatsapp?.id) {
+      const whatsapp = await this.whatsappService.findById(entity.whatsapp.id);
+      savedUser.whatsapp = whatsapp;
+    }
+
+    if (entity.userQueues?.length) {
+      const queueIds = entity.userQueues.map((uq) => uq.queue.id);
+      const queues = await this.queueService.findByIds(queueIds);
+
+      const userQueues = queues.map((queue) => ({
+        user: savedUser,
+        queue,
+      }));
+
+      await this.userQueueService.createMany(userQueues);
+    }
+
+    return await userRepository.findOne({
+      where: { id: savedUser.id },
+      relations: ["userQueues.queue", "whatsapp"],
+    });
   }
+
   async update(id: string, entity: User): Promise<User> {
     const userExists = await userRepository.findOneBy({ id });
 
@@ -53,6 +77,7 @@ export class UserServiceImpl implements UserService {
 
     return await userRepository.save(userExists);
   }
+
   async delete(id: string): Promise<void> {
     const userExists = await userRepository.findOneBy({ id });
 

@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
+import { Queue } from "../entities/Queue";
 import { User } from "../entities/User";
+import UserQueue from "../entities/UserQueue";
+import { Whatsapp } from "../entities/Whatsapp";
 import { UserCreateSchema, UserUpdateSchema } from "../schemas/user.schemas";
 import { UserService } from "../services/UserService";
 
@@ -7,9 +10,27 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   create: RequestHandler = async (req, res) => {
-    const { email, name, password }: UserCreateSchema = req.body;
+    const {
+      email,
+      name,
+      password,
+      queueIds,
+      profile,
+      whatsappId,
+    }: UserCreateSchema = req.body;
 
-    const user = new User({ email, name, password });
+    const user = new User({
+      email,
+      name,
+      password,
+      profile,
+      whatsapp: whatsappId ? ({ id: whatsappId } as Whatsapp) : undefined,
+      userQueues: queueIds?.map((queueId) => {
+        const userQueue = new UserQueue();
+        userQueue.queue = { id: queueId } as Queue;
+        return userQueue;
+      }),
+    });
 
     const newUser = await this.userService.create(user);
 
