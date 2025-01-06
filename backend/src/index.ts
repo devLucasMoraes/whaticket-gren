@@ -1,10 +1,24 @@
 import gracefulShutdown from "http-graceful-shutdown";
+import "reflect-metadata";
 import app from "./app";
+import { AppDataSource } from "./database/data-source";
 import { initIO } from "./libs/socket";
 
-const server = app.listen(process.env.PORT, () => {
-  console.info(`Server started on port: ${process.env.PORT}`);
-});
+const startServer = async () => {
+  try {
+    await AppDataSource.initialize();
+    console.log("Database connected");
 
-initIO(server);
-gracefulShutdown(server);
+    const server = app.listen(process.env.PORT, () => {
+      console.info(`Server started on port: ${process.env.PORT}`);
+    });
+
+    initIO(server);
+    gracefulShutdown(server);
+  } catch (error) {
+    console.error("Failed to connect to the database:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
