@@ -1,13 +1,22 @@
 import { RequestHandler } from "express";
 import { Queue } from "../entities/Queue";
 import { User } from "../entities/User";
-import UserQueue from "../entities/UserQueue";
 import { Whatsapp } from "../entities/Whatsapp";
+import { pageable } from "../helpers/pageable";
 import { UserCreateSchema, UserUpdateSchema } from "../schemas/user.schemas";
 import { UserService } from "../services/UserService";
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  list: RequestHandler = async (req, res) => {
+    const { page, size, sort } = req.query;
+
+    const result = await this.userService.list(
+      pageable(page as string, size as string, sort as string | string[])
+    );
+    res.status(200).json(result);
+  };
 
   create: RequestHandler = async (req, res) => {
     const {
@@ -24,11 +33,9 @@ export class UserController {
       name,
       password,
       profile,
-      whatsapp: whatsappId ? ({ id: whatsappId } as Whatsapp) : undefined,
-      userQueues: queueIds?.map((queueId) => {
-        const userQueue = new UserQueue();
-        userQueue.queue = { id: queueId } as Queue;
-        return userQueue;
+      whatsapp: whatsappId ? new Whatsapp({ id: whatsappId }) : undefined,
+      queues: queueIds?.map((queueId) => {
+        return new Queue({ id: queueId });
       }),
     });
 
@@ -47,9 +54,25 @@ export class UserController {
 
   update: RequestHandler = async (req, res) => {
     const { id } = req.params;
-    const { email, name, password }: UserUpdateSchema = req.body;
+    const {
+      email,
+      name,
+      password,
+      profile,
+      whatsappId,
+      queueIds,
+    }: UserUpdateSchema = req.body;
 
-    const user = new User({ email, name, password });
+    const user = new User({
+      email,
+      name,
+      password,
+      profile,
+      whatsapp: whatsappId ? new Whatsapp({ id: whatsappId }) : undefined,
+      queues: queueIds?.map((queueId) => {
+        return new Queue({ id: queueId });
+      }),
+    });
 
     const updatedUser = await this.userService.update(id, user);
 

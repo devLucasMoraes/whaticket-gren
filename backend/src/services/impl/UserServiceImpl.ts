@@ -1,6 +1,7 @@
 import { User } from "../../entities/User";
 import { BadRequestError, NotFoundError } from "../../errors/AppError";
-import { userRepository } from "../../repositories/userRepository";
+import { userRepository } from "../../repositories";
+import { Page, PageRequest } from "../../repositories/BaseRepository";
 import { UserService } from "../UserService";
 
 export class UserServiceImpl implements UserService {
@@ -14,12 +15,18 @@ export class UserServiceImpl implements UserService {
     return user;
   }
 
-  async list(): Promise<User[]> {
-    return await userRepository.find();
+  list(pageRequest?: PageRequest): Promise<Page<User>> {
+    return userRepository.findAllPaginated(pageRequest);
   }
 
   async show(id: string): Promise<User> {
-    const userExists = await userRepository.findOneBy({ id });
+    const userExists = await userRepository.findOne({
+      where: { id },
+      relations: {
+        queues: true,
+        whatsapp: true,
+      },
+    });
 
     if (!userExists) {
       throw new NotFoundError("User not found");
@@ -39,29 +46,9 @@ export class UserServiceImpl implements UserService {
 
     await entity.hashPassword();
 
-    const savedUser = await userRepository.save(entity);
+    const newUser = userRepository.create(entity);
 
-    if (entity.whatsapp?.id) {
-      const whatsapp = await this.whatsappService.findById(entity.whatsapp.id);
-      savedUser.whatsapp = whatsapp;
-    }
-
-    if (entity.userQueues?.length) {
-      const queueIds = entity.userQueues.map((uq) => uq.queue.id);
-      const queues = await this.queueService.findByIds(queueIds);
-
-      const userQueues = queues.map((queue) => ({
-        user: savedUser,
-        queue,
-      }));
-
-      await this.userQueueService.createMany(userQueues);
-    }
-
-    return await userRepository.findOne({
-      where: { id: savedUser.id },
-      relations: ["userQueues.queue", "whatsapp"],
-    });
+    return await userRepository.save(newUser);
   }
 
   async update(id: string, entity: User): Promise<User> {

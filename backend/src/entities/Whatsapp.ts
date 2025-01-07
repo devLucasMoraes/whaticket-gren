@@ -64,7 +64,7 @@ export class Whatsapp {
   whatsappUsers: User[];
 
   @ManyToMany(() => Queue, (queue) => queue.whatsapps)
-  @JoinTable({ name: "whatsapp_queue" })
+  @JoinTable({ name: "whatsapp_queues" })
   queues: Queue[];
 
   constructor(data?: Partial<Whatsapp>) {

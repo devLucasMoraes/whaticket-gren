@@ -3,12 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Ticket } from "./Ticket";
-import UserQueue from "./UserQueue";
+import { User } from "./User";
 import { Whatsapp } from "./Whatsapp";
 
 @Entity("queues")
@@ -37,10 +38,10 @@ export class Queue {
   @OneToMany(() => Ticket, (ticket) => ticket.queue)
   tickets: Ticket[];
 
-  @OneToMany(() => UserQueue, (userQueue) => userQueue.queue)
-  userQueues: UserQueue[];
+  @ManyToMany(() => User, (user) => user.queues)
+  users: Whatsapp[];
 
-  @OneToMany(() => Whatsapp, (whatsapp) => whatsapp.queues)
+  @ManyToMany(() => Whatsapp, (whatsapp) => whatsapp.queues)
   whatsapps: Whatsapp[];
 
   constructor(data?: Partial<Queue>) {

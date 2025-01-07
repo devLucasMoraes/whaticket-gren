@@ -14,10 +14,12 @@ const userController = new UserController(userService);
 
 const userRoutes = Router();
 
+userRoutes.get("/users", isAuth, userController.list);
+
 userRoutes.post(
   "/users",
   isAuth,
-  validateSchema({ body: userCreateSchema, params: userParamsSchema }),
+  validateSchema({ body: userCreateSchema }),
   userController.create
 );
 

@@ -8,7 +8,7 @@ export const userCreateSchema = z.object({
     .min(6, "Senha muito curta")
     .max(100, "Senha muito longa"),
   queueIds: z.array(z.number()).optional(),
-  profile: z.enum(["admin", "user"]).optional().default("user"),
+  profile: z.enum(["admin", "user"]).optional(),
   whatsappId: z.number().optional(),
 });
 
@@ -26,6 +26,9 @@ export const userUpdateSchema = z.object({
     .min(6, "Senha muito curta")
     .max(100, "Nome muito longo")
     .nonempty("Senha é obrigatória"),
+  queueIds: z.array(z.number()).optional(),
+  profile: z.enum(["admin", "user"]).optional(),
+  whatsappId: z.number().optional(),
 });
 
 export type UserUpdateSchema = z.infer<typeof userUpdateSchema>;

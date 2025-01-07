@@ -1,6 +1,12 @@
-### SINGUP
+### Variáveis
 
-POST http://localhost:3000/signup HTTP/1.1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6Ijg2ZGVhOTJlLWFjOWQtNDFiMi05MzE1LWJmZWU3NmU1NDc3NiIsImlhdCI6MTczNjIxMDEyOCwiZXhwIjoxNzM2MjExMDI4fQ.qqaJ6ClLTYFEPOKqPyz8leI3kY3n4smpJrwzfstQSmw
+@baseUrl = http://localhost:3000
+
+### Autenticação
+
+### SINGUP
+POST {{baseUrl}}/signup HTTP/1.1
 content-type: application/json
 
 {
@@ -10,8 +16,7 @@ content-type: application/json
 }
 
 ### LOGIN
-
-POST http://localhost:3000/login HTTP/1.1
+POST {{baseUrl}}/login HTTP/1.1
 content-type: application/json
 
 {
@@ -19,10 +24,36 @@ content-type: application/json
     "password": "123456"
 }
 
-### QUEUE
-POST http://localhost:3000/queue HTTP/1.1
+### Usuários
+
+### Listar usuários
+GET {{baseUrl}}/users HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+Authorization: Bearer {{token}}
+
+### Obter usuário
+GET {{baseUrl}}/users/9398095a-10aa-4566-92a1-b2f0f7f817af HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+### Criar usuário
+POST {{baseUrl}}/users HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "user test2",
+    "email": "test2@test.com",
+    "password": "123456",
+    "queueIds": [119,120]
+}
+
+### Filas
+
+### Criar fila
+POST {{baseUrl}}/queue HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
 
 {
     "color": "#1111de",
@@ -30,32 +61,32 @@ Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2
     "greetingMessage": "message1 test-call"
 }
 
+### WhatsApp
 
-### WHATSAPP 
-
-POST http://localhost:3000/whatsapp HTTP/1.1
+### Criar WhatsApp
+POST {{baseUrl}}/whatsapp HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+Authorization: Bearer {{token}}
 
 {
     "farewellMessage": "message test-call",
     "greetingMessage": "message test-call",
     "isDefault": false,
-    "name": "teste-call2",
-    "queueIds": [102]
+    "name": "teste-call3",
+    "queueIds": [120]
 }
 
-### WHATSAPP 
-GET http://localhost:3000/whatsapp/114 HTTP/1.1
+### Obter WhatsApp
+GET {{baseUrl}}/whatsapp/140 HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+Authorization: Bearer {{token}}
 
-### WHATSAPP 
-GET http://localhost:3000/whatsapp HTTP/1.1
+### Listar WhatsApp
+GET {{baseUrl}}/whatsapp HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6IjU4NzQyOTk5LTZmYjktNDQwYS1iNDliLWEyMTExMjEzN2M1MSIsImlhdCI6MTczNjExOTE0MiwiZXhwIjoxNzM2MTIwMDQyfQ.9IIU8LpdYbfjIAuLPr2p4GaSFMqRYJmQBj-0OibdktE
+Authorization: Bearer {{token}}
 
-### WHATSAPP 
-DELETE  http://localhost:3000/whatsapp/114 HTTP/1.1
+### Deletar WhatsApp
+DELETE {{baseUrl}}/whatsapp/140 HTTP/1.1
 content-type: application/json
-Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6ImU4YTcyMDAzLTUyYzktNGI0Ni1iYzViLWQzYTk1NmEzNGRmMyIsImlhdCI6MTczNjExNzU3MCwiZXhwIjoxNzM2MTE4NDcwfQ.69NlLrdUr3hvmlhaCMGlwkweWKi59hGkmDoX17O9kU0
+Authorization: Bearer {{token}}

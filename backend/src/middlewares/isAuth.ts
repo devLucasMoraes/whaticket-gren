@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { BadRequestError, UnauthorizedError } from "../errors/AppError";
-import { userRepository } from "../repositories/userRepository";
+import { userRepository } from "../repositories";
 
 export const isAuth: RequestHandler = async (req, res, next) => {
   const { authorization } = req.headers;

@@ -5,13 +5,15 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Queue } from "./Queue";
 import { Ticket } from "./Ticket";
-import UserQueue from "./UserQueue";
 import { Whatsapp } from "./Whatsapp";
 
 @Entity("users")
@@ -46,14 +48,15 @@ export class User {
   @OneToMany(() => Ticket, (ticket) => ticket.user)
   tickets: Ticket[];
 
-  @OneToMany(() => UserQueue, (userQueue) => userQueue.user)
-  userQueues: UserQueue[];
-
   @ManyToOne(() => Whatsapp, (whatsapp) => whatsapp.whatsappUsers, {
     nullable: true,
   })
   @JoinColumn({ name: "whatsapp_id" })
   whatsapp: Whatsapp;
+
+  @ManyToMany(() => Queue, (queue) => queue.whatsapps)
+  @JoinTable({ name: "user_queues" })
+  queues: Queue[];
 
   async hashPassword() {
     this.password = await hash(this.password, 8);
