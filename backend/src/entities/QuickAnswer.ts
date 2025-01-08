@@ -26,4 +26,10 @@ export class QuickAnswer {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  constructor(data?: Partial<QuickAnswer>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }

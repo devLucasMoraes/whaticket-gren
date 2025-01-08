@@ -5,12 +5,22 @@ import { Page, PageRequest } from "../../repositories/BaseRepository";
 import { UserService } from "../UserService";
 
 export class UserServiceImpl implements UserService {
-  list(): Promise<User[]> {
-    throw new Error("Method not implemented.");
+  async findByEmail(email: string): Promise<User> {
+    const user = await userRepository.findOneBy({ email });
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    return user;
   }
 
   async listPaginated(pageRequest?: PageRequest): Promise<Page<User>> {
     return await userRepository.findAllPaginated(pageRequest);
+  }
+
+  list(): Promise<User[]> {
+    throw new Error("Method not implemented.");
   }
 
   async show(id: string): Promise<User> {
@@ -68,15 +78,5 @@ export class UserServiceImpl implements UserService {
 
     await userRepository.softDelete(id);
     return Promise.resolve();
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    const user = await userRepository.findOneBy({ email });
-
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    return user;
   }
 }
