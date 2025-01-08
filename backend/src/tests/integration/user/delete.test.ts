@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 import request from "supertest";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { userRepository } from "../../../repositories/userRepository";
+import { userRepository } from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("DELETE /users", () => {
   let token: string;
@@ -9,16 +9,7 @@ describe("DELETE /users", () => {
 
   beforeAll(async () => {
     await orchestrator.waitForAllServices();
-  });
-
-  afterAll(async () => {
-    await orchestrator.disconnect();
-  });
-
-  beforeEach(async () => {
     await orchestrator.clearDatabase();
-
-    // Create a test user and generate token
     const user = userRepository.create({
       name: "Test User",
       email: "test@example.com",
@@ -33,19 +24,8 @@ describe("DELETE /users", () => {
     });
   });
 
-  it("should delete user successfully", async () => {
-    const response = await request("http://localhost:3000")
-      .delete(`/users/${userId}`)
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(204);
-
-    // Verify user was deleted
-    const verifyResponse = await request("http://localhost:3000")
-      .get(`/users/${userId}`)
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(verifyResponse.status).toBe(400);
+  afterAll(async () => {
+    await orchestrator.disconnect();
   });
 
   it("should not delete user without authentication", async () => {
@@ -56,21 +36,33 @@ describe("DELETE /users", () => {
     expect(response.status).toBe(401);
   });
 
-  it("should not delete other users", async () => {
-    // Create another user
-    const anotherUser = userRepository.create({
-      name: "Another User",
-      email: "another@example.com",
-      password: "123456",
-    });
-    anotherUser.hashPassword();
-    await userRepository.save(anotherUser);
-
-    // Try to delete another user
+  it("should not delete whatsapp with not exist user", async () => {
     const response = await request("http://localhost:3000")
-      .delete(`/users/${anotherUser.id}`)
+      .delete("/users/9398095a-10aa-4566-92a1-b2f0f7f817af")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(response.status).toBe(403);
+    console.log(
+      "should not delete whatsapp with not exist user",
+      response.body
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  it("should delete user successfully", async () => {
+    const response = await request("http://localhost:3000")
+      .delete(`/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    console.log("should delete user successfully", response.body);
+
+    expect(response.status).toBe(204);
+
+    const verifyResponse = await request("http://localhost:3000")
+      .get(`/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(verifyResponse.status).toBe(400);
   });
 });

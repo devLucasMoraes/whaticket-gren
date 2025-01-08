@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 import request from "supertest";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { userRepository } from "../../../repositories/userRepository";
+import { userRepository } from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("GET /users", () => {
   let token: string;
@@ -9,16 +9,8 @@ describe("GET /users", () => {
 
   beforeAll(async () => {
     await orchestrator.waitForAllServices();
-  });
+    await orchestrator.clearDatabase();
 
-  afterAll(async () => {
-    await orchestrator.disconnect();
-  });
-
-  beforeEach(async () => {
-    await userRepository.clear();
-
-    // Create a test user and generate token
     const user = userRepository.create({
       name: "Test User",
       email: "test@example.com",
@@ -31,14 +23,8 @@ describe("GET /users", () => {
     token = sign({ id: user.id }, process.env.JWT_SECRET || "");
   });
 
-  it("should get user profile with valid token", async () => {
-    const response = await request("http://localhost:3000")
-      .get(`/users/${userId}`)
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body.email).toBe("test@example.com");
+  afterAll(async () => {
+    await orchestrator.disconnect();
   });
 
   it("should not get user profile without token", async () => {
@@ -46,18 +32,35 @@ describe("GET /users", () => {
       `/users/${userId}`
     );
 
+    console.log("should not get user profile without token", response.body);
+
     expect(response.status).toBe(401);
+  });
+
+  it("should get user profile with valid token", async () => {
+    const response = await request("http://localhost:3000")
+      .get(`/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    console.log("should get user profile with valid token", response.body);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.email).toBe("test@example.com");
   });
 
   it("should get list of users with pagination", async () => {
     const response = await request("http://localhost:3000")
       .get("/users")
       .set("Authorization", `Bearer ${token}`)
-      .query({ page: 1, limit: 10 });
+      .query({ page: 1, size: 10 });
+
+    console.log("should get list of users with pagination", response.body);
 
     expect(response.status).toBe(200);
-    expect(Array.isArray(response.body.users)).toBe(true);
-    expect(response.body).toHaveProperty("total");
-    expect(response.body).toHaveProperty("page");
+    expect(Array.isArray(response.body.content)).toBe(true);
+    expect(response.body).toHaveProperty("totalPages");
+    expect(response.body).toHaveProperty("totalElements");
+    expect(response.body).toHaveProperty("number");
   });
 });

@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 import request from "supertest";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { userRepository } from "../../../repositories/userRepository";
+import { userRepository } from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("GET /whatsapp", () => {
   let token: string;

@@ -1,6 +1,7 @@
 ### Variáveis
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6InVzZXIiLCJpZCI6Ijg2ZGVhOTJlLWFjOWQtNDFiMi05MzE1LWJmZWU3NmU1NDc3NiIsImlhdCI6MTczNjIxMDEyOCwiZXhwIjoxNzM2MjExMDI4fQ.qqaJ6ClLTYFEPOKqPyz8leI3kY3n4smpJrwzfstQSmw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6Imx1Y2FzIiwicHJvZmlsZSI6ImFkbWluIiwiaWQiOiI3MTBjMzllZC1kYmRhLTRiODAtOWU5MC1mMmQ1MzhiZDYyZjgiLCJpYXQiOjE3MzYyOTkwMTgsImV4cCI6MTczNjI5OTkxOH0.tRNj-R7SU6O6Ki_vjyj5GMwugENq_oNfyJNPjPgWuIY
+
 @baseUrl = http://localhost:3000
 
 ### Autenticação
@@ -27,7 +28,7 @@ content-type: application/json
 ### Usuários
 
 ### Listar usuários
-GET {{baseUrl}}/users HTTP/1.1
+GET {{baseUrl}}/users?page=1&size=1 HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{token}}
 

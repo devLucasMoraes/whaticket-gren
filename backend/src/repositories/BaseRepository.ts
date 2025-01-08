@@ -47,7 +47,7 @@ export abstract class BaseRepository<
 > extends Repository<T> {
   protected buildPaginationOptions(pageRequest: PageRequest = {}) {
     const page = Number(pageRequest.page) || 0;
-    const size = Number(pageRequest.size) || 10;
+    const size = Number(pageRequest.size) || 20;
 
     const order: FindOptionsOrder<T> = {}; // Inicializa a ordem de ordenação
     const sortFields = pageRequest.sort

@@ -1,10 +1,10 @@
-import { AppDataSource } from "../database/data-source";
+import { appDataSource } from "../database/data-source";
 import { User } from "../entities/User";
 import { BaseRepository, Page, PageRequest } from "./BaseRepository";
 
 export class UserRepository extends BaseRepository<User> {
   constructor() {
-    const repository = AppDataSource.getRepository(User);
+    const repository = appDataSource.getRepository(User);
     super(repository.target, repository.manager, repository.queryRunner);
   }
 

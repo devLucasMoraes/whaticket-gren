@@ -41,4 +41,4 @@ const configs: { [key: string]: DataSourceOptions & SeederOptions } = {
   },
 };
 
-export const AppDataSource = new DataSource(configs[env]);
+export const appDataSource = new DataSource(configs[env]);

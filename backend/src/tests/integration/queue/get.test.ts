@@ -1,11 +1,10 @@
 import { sign } from "jsonwebtoken";
 import request from "supertest";
 import { Queue } from "../../../entities/Queue";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { queueRepository } from "../../../repositories/queueRepository";
-import { userRepository } from "../../../repositories/userRepository";
+import { queueRepository, userRepository } from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
-describe("POST /queue", () => {
+describe("GET /queue", () => {
   let token: string;
   let userId: string;
   let queue: Queue;

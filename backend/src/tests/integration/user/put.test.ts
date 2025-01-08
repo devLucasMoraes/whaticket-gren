@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 import request from "supertest";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { userRepository } from "../../../repositories/userRepository";
+import { userRepository } from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("PUT /users", () => {
   let token: string;
@@ -9,16 +9,8 @@ describe("PUT /users", () => {
 
   beforeAll(async () => {
     await orchestrator.waitForAllServices();
-  });
+    await orchestrator.clearDatabase();
 
-  afterAll(async () => {
-    await orchestrator.disconnect();
-  });
-
-  beforeEach(async () => {
-    await userRepository.clear();
-
-    // Create a test user and generate token
     const user = userRepository.create({
       name: "Test User",
       email: "test@example.com",
@@ -31,6 +23,10 @@ describe("PUT /users", () => {
     token = sign({ id: user.id }, process.env.JWT_SECRET || "");
   });
 
+  afterAll(async () => {
+    await orchestrator.disconnect();
+  });
+
   it("should update user profile successfully", async () => {
     const response = await request("http://localhost:3000")
       .put(`/users/${userId}`)
@@ -40,6 +36,8 @@ describe("PUT /users", () => {
         email: "updated@example.com",
         password: "123456",
       });
+
+    console.log("should update user profile successfully", response.body);
 
     expect(response.status).toBe(200);
     expect(response.body.name).toBe("Updated Name");

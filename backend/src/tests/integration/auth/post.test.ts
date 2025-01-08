@@ -1,18 +1,14 @@
 import request from "supertest";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { userRepository } from "../../../repositories/userRepository";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("POST /signup", () => {
   beforeAll(async () => {
     await orchestrator.waitForAllServices();
+    await orchestrator.clearDatabase();
   });
 
   afterAll(async () => {
     await orchestrator.disconnect();
-  });
-
-  beforeEach(async () => {
-    await userRepository.clear();
   });
 
   it("should create a new user successfully", async () => {
@@ -23,6 +19,8 @@ describe("POST /signup", () => {
         email: "john@example.com",
         password: "123456",
       });
+
+    console.log("should create a new user successfully", response.body);
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
@@ -48,6 +46,8 @@ describe("POST /signup", () => {
         password: "123456",
       });
 
+    console.log("should not create user with duplicate email", response.body);
+
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");
   });
@@ -60,6 +60,8 @@ describe("POST /signup", () => {
         email: "",
         password: "",
       });
+
+    console.log("should validate required fields", response.body);
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("message");

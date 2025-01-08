@@ -1,6 +1,6 @@
 import retry from "async-retry";
 import { DataSource } from "typeorm";
-import { AppDataSource } from "../database/data-source";
+import { appDataSource } from "../database/data-source";
 import { Queue } from "../entities/Queue";
 import { User } from "../entities/User";
 import { Whatsapp } from "../entities/Whatsapp";
@@ -22,10 +22,10 @@ class TestOrchestrator {
   async connect() {
     if (!this.isConnected) {
       try {
-        if (!AppDataSource.isInitialized) {
-          this.dataSource = await AppDataSource.initialize();
+        if (!appDataSource.isInitialized) {
+          this.dataSource = await appDataSource.initialize();
         } else {
-          this.dataSource = AppDataSource;
+          this.dataSource = appDataSource;
         }
         this.isConnected = true;
       } catch (error) {

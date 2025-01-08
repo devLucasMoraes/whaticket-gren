@@ -1,6 +1,6 @@
 import { Whatsapp } from "../../entities/Whatsapp";
 import { BadRequestError, NotFoundError } from "../../errors/AppError";
-import { whatsappRepository } from "../../repositories/whatsappRepository";
+import { whatsappRepository } from "../../repositories/";
 import { WhatsappService } from "../WhatsappService";
 
 export class WhatsappServiceImpl implements WhatsappService {
@@ -11,6 +11,7 @@ export class WhatsappServiceImpl implements WhatsappService {
       },
     });
   }
+
   async show(id: number): Promise<Whatsapp> {
     const whatsappExists = await whatsappRepository.findOne({
       where: { id },
@@ -25,6 +26,7 @@ export class WhatsappServiceImpl implements WhatsappService {
 
     return whatsappExists;
   }
+
   async create(entity: Whatsapp): Promise<Whatsapp> {
     const { name } = entity;
 
@@ -59,6 +61,7 @@ export class WhatsappServiceImpl implements WhatsappService {
 
     return whatsappRepository.save(newWhatsapp);
   }
+
   async update(id: number, entity: Whatsapp): Promise<Whatsapp> {
     const whatsappExists = await whatsappRepository.findOneBy({ id });
 
@@ -82,6 +85,7 @@ export class WhatsappServiceImpl implements WhatsappService {
 
     return await whatsappRepository.save(whatsappExists);
   }
+
   async delete(id: number): Promise<void> {
     const whatsappExists = await whatsappRepository.findOneBy({ id });
 

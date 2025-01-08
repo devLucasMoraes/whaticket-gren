@@ -2,10 +2,12 @@ import { sign } from "jsonwebtoken";
 import request from "supertest";
 import { Queue } from "../../../entities/Queue";
 import { Whatsapp } from "../../../entities/Whatsapp";
-import { orchestrator } from "../../../helpers/orchestrator";
-import { queueRepository } from "../../../repositories/queueRepository";
-import { userRepository } from "../../../repositories/userRepository";
-import { whatsappRepository } from "../../../repositories/whatsappRepository";
+import {
+  queueRepository,
+  userRepository,
+  whatsappRepository,
+} from "../../../repositories/";
+import { orchestrator } from "../../../utils/orchestrator";
 
 describe("DELETE /whatsapp", () => {
   let token: string;

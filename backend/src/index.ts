@@ -1,12 +1,12 @@
 import gracefulShutdown from "http-graceful-shutdown";
 import "reflect-metadata";
 import app from "./app";
-import { AppDataSource } from "./database/data-source";
+import { appDataSource } from "./database/data-source";
 import { initIO } from "./libs/socket";
 
 const startServer = async () => {
   try {
-    await AppDataSource.initialize();
+    await appDataSource.initialize();
     console.log("Database connected");
 
     const server = app.listen(process.env.PORT, () => {
