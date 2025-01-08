@@ -17,7 +17,7 @@ export class QuickAnswerServiceImpl implements QuickAnswerService {
     const quickAnswerExists = await quickAnswerRepository.findOneBy({ id });
 
     if (!quickAnswerExists) {
-      throw new NotFoundError("Quick Answer not found");
+      throw new NotFoundError("ERR_NO_QUICK_ANSWER_FOUND");
     }
 
     return quickAnswerExists;
@@ -31,7 +31,7 @@ export class QuickAnswerServiceImpl implements QuickAnswerService {
     });
 
     if (quickAnswerExists) {
-      throw new BadRequestError("Shortcut already exists");
+      throw new BadRequestError("ERR_SHORTCUT_DUPLICATED");
     }
 
     const newQuickAnswer = quickAnswerRepository.create(entity);
@@ -41,13 +41,13 @@ export class QuickAnswerServiceImpl implements QuickAnswerService {
 
   async update(id: number, entity: QuickAnswer): Promise<QuickAnswer> {
     if (id !== entity.id) {
-      throw new BadRequestError("Invalid id");
+      throw new BadRequestError("ERR_ID_MISMATCH");
     }
 
     const quickAnswerExists = await quickAnswerRepository.findOneBy({ id });
 
     if (!quickAnswerExists) {
-      throw new NotFoundError("Quick Answer not found");
+      throw new NotFoundError("ERR_NO_QUICK_ANSWER_FOUND");
     }
 
     const { shortcut } = entity;
@@ -57,7 +57,7 @@ export class QuickAnswerServiceImpl implements QuickAnswerService {
     });
 
     if (shortcutExists && shortcutExists.id !== id) {
-      throw new BadRequestError("Shortcut already exists");
+      throw new BadRequestError("ERR_SHORTCUT_DUPLICATED");
     }
 
     quickAnswerRepository.merge(quickAnswerExists, entity);
@@ -69,7 +69,7 @@ export class QuickAnswerServiceImpl implements QuickAnswerService {
     const quickAnswerExists = quickAnswerRepository.findOneBy({ id });
 
     if (!quickAnswerExists) {
-      throw new NotFoundError("Quick Answer not found");
+      throw new NotFoundError("ERR_NO_QUICK_ANSWER_FOUND");
     }
 
     await quickAnswerRepository.softDelete(id);
