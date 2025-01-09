@@ -2,7 +2,7 @@ import gracefulShutdown from "http-graceful-shutdown";
 import "reflect-metadata";
 import app from "./app";
 import { appDataSource } from "./database/data-source";
-import { initIO } from "./libs/socket";
+import { socketManager } from "./libs/socketManager";
 
 const startServer = async () => {
   try {
@@ -13,7 +13,7 @@ const startServer = async () => {
       console.info(`Server started on port: ${process.env.PORT}`);
     });
 
-    initIO(server);
+    socketManager.initializeIO(server);
     gracefulShutdown(server);
   } catch (error) {
     console.error("Failed to connect to the database:", error);
