@@ -1,9 +1,33 @@
 import { Whatsapp } from "../../entities/Whatsapp";
 import { BadRequestError, NotFoundError } from "../../errors/AppError";
 import { whatsappRepository } from "../../repositories/";
+import { UserService } from "../UserService";
 import { WhatsappService } from "../WhatsappService";
 
 export class WhatsappServiceImpl implements WhatsappService {
+  constructor(private readonly userService: UserService) {}
+
+  async GetWhatsAppByUserId(userId: string): Promise<Whatsapp | null> {
+    const user = await this.userService.show(userId);
+
+    if (user.whatsapp !== null) {
+      console.info(
+        `Found whatsapp linked to user '${user.name}' is '${user.whatsapp.name}'.`
+      );
+    }
+
+    return user.whatsapp;
+  }
+
+  async GetDefaultWhatsApp(): Promise<Whatsapp> {
+    const defaultWhatsapp = await whatsappRepository.findOneBy({
+      isDefault: true,
+    });
+    if (!defaultWhatsapp) {
+      throw new NotFoundError("ERR_NO_DEF_WAPP_FOUND");
+    }
+    return defaultWhatsapp;
+  }
   async list(): Promise<Whatsapp[]> {
     return await whatsappRepository.find({
       relations: {

@@ -48,4 +48,10 @@ export class Contact {
 
   @OneToMany(() => ContactCustomField, (customField) => customField.contact)
   extraInfo: ContactCustomField[];
+
+  constructor(data?: Partial<Contact>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }

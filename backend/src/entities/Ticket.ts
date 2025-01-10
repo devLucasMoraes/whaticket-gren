@@ -59,4 +59,10 @@ export class Ticket {
   @ManyToOne(() => Queue, (queue) => queue.tickets, { nullable: true })
   @JoinColumn({ name: "queue_id" })
   queue: Queue;
+
+  constructor(data?: Partial<Ticket>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }
