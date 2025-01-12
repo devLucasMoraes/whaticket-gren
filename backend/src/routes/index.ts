@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authRoutes from "./authRoutes";
+import contactRoutes from "./contactRoute";
 import queueRoutes from "./queueRoutes";
 import quickAnswerRoutes from "./quickAnswerRoutes";
 import ticketRoutes from "./ticketRoutes";
@@ -14,5 +15,6 @@ routes.use(queueRoutes);
 routes.use(whatsappRoutes);
 routes.use(quickAnswerRoutes);
 routes.use(ticketRoutes);
+routes.use(contactRoutes);
 
 export default routes;
